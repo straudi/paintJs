@@ -4,6 +4,8 @@ const colors = document.getElementsByClassName("jsColor");
 const range = document.getElementById("jsRange");
 const mode = document.getElementById("jsMode");
 const saveBtn = document.getElementById("jsSave");
+const docV = document.documentElement;
+const fullBtn = document.getElementById("jsFullScreen");
 
 const INITIAL_COLOR = "#2c2c2c";
 const CANVAS_SIZE = 700;
@@ -19,6 +21,7 @@ ctx.lineWidth = 2.5;
 
 let painting = false;
 let filling = false;
+let screen = false;
 
 function startPainting () {
     painting = true;
@@ -84,6 +87,31 @@ function handleSaveClick(){
     link.click();
 }
 
+function handleScreen(){
+    if(screen === false){
+        screen = true;
+        if (docV.requestFullscreen)
+            docV.requestFullscreen();
+        else if (docV.webkitRequestFullscreen) // Chrome, Safari (webkit)
+            docV.webkitRequestFullscreen();
+        else if (docV.mozRequestFullScreen) // Firefox
+            docV.mozRequestFullScreen();
+        else if (docV.msRequestFullscreen) // IE or Edge
+            docV.msRequestFullscreen();
+    }else{
+        screen = false;
+        if (document.exitFullscreen)
+            document.exitFullscreen();
+        else if (document.webkitExitFullscreen)
+            document.webkitExitFullscreen();
+        else if (document.mozCancelFullScreen)
+            document.mozCancelFullScreen();
+        else if (document.msExitFullscreen)
+            document.msExitFullscreen();
+    }
+
+}
+
 if (canvas) {
     canvas.addEventListener("mousemove", onMouseMove);
     canvas.addEventListener("mousedown", startPainting);/* 마우스를 클릭하고 있는 상태 */
@@ -106,4 +134,8 @@ if(mode){
 
 if(saveBtn){
     saveBtn.addEventListener("click", handleSaveClick);
+}
+
+if(fullBtn){
+    fullBtn.addEventListener("click", handleScreen);
 }
